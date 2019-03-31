@@ -1,0 +1,64 @@
+@import url('https://fonts.googleapis.com/css?family=Ubuntu:700i');
+@import url('https://fonts.googleapis.com/css?family=Ubuntu+Mono');
+
+.App {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  background-color: #212121;
+}
+
+.App-header {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
+
+h1 {
+  color: #F19938;
+  font-family: 'Ubuntu', sans-serif;
+}
+
+h2 {
+  font-family: 'Ubuntu', sans-serif;
+}
+
+.main {
+  display: flex;
+  flex-direction: row;
+  flex-grow: 9;
+  color: #bbbbbb;
+}
+
+.container {
+  display: flex;
+  flex-grow: 1;
+  border-style: solid;
+  /* margin: 1vw; */
+  border-color: #333333;
+  border-width: 1px;
+  /* border-radius: 5px; */
+  padding: 1vw;
+}
+
+.console {
+  display: flex;
+  /* align-items: center; */
+  flex-direction: row;
+  flex-grow: 1;
+  color: #bbbbbb;
+  font-family: 'Ubuntu Mono', monospace;
+}
+
+input {
+  background: inherit;
+  border: none;
+  width: 100vw;
+  color: inherit;
+  font-size: 4vh;
+  font-family: inherit;
+}
