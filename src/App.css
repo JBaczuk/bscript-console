@@ -6,6 +6,7 @@
   flex-direction: column;
   height: 100vh;
   background-color: #212121;
+  padding: 1vw;
 }
 
 .App-header {
@@ -45,6 +46,16 @@ h2 {
   padding: 1vw;
 }
 
+#queue {
+  display: flex;
+  flex-direction: column;
+}
+
+#stack {
+  display: flex;
+  flex-direction: column;
+}
+
 .console {
   display: flex;
   /* align-items: center; */
@@ -54,11 +65,20 @@ h2 {
   font-family: 'Ubuntu Mono', monospace;
 }
 
-input {
+.consoleInput {
   background: inherit;
-  border: none;
+  border-color: #333333;
+  border-width: 1px;
+  border-style: solid;
+  line-height: 1vw;
   width: 100vw;
   color: inherit;
   font-size: 4vh;
   font-family: inherit;
+  padding: .2vw;
+}
+
+/* FIXME: not working */
+.consoleInput:focus {
+  border-color: #F19938;
 }
