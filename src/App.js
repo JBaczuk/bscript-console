@@ -31,11 +31,18 @@ class App extends Component {
     })
   }
 
-  handleInputKey = (event) => {
+  handleInputKey = async (event) => {
     if (event.key === 'Enter') {
       // TODO: validate each expression separated by space
       // TODO: insert into queue one by one stacked
-      this.initExecution()
+      if (this.state.script !== '') {
+        await this.initExecution()
+        this.setState({
+          script: ''
+        })
+      } else {
+        this.step()
+      }
     }
   }
 
@@ -48,6 +55,10 @@ class App extends Component {
 
   initExecution = async () => {
     if (this.state.initialized) return
+    if (this.state.script === '') {
+      console.warn('no instructions provided')
+      return false
+    }
     // TODO: interpret each item in queue
     // Test execution
     await this.putItemsInQueue()
@@ -61,31 +72,43 @@ class App extends Component {
   }
 
   play = async () => {
-    console.log('play')
-    await this.initExecution()
+    let initialized = await this.initExecution()
+    if (!initialized) return
     let evalResult = this.interpreter.evaluate()
-    console.log(evalResult)
     // TODO: animate step by step??
     // TODO: if true, show success
   }
 
   step = async () => {
-    console.log('step')
-    await this.initExecution()
-    this.interpreter.step()
-    let queue = this.state.queue.slice(1)
-    console.log('stack', this.interpreter.stack)
-    let stack = this.interpreter.stack.map(item => {
-      return item.toString('hex')
-    })
-    this.setState({
-      stack,
-      queue
-    })
+    let initialized = await this.initExecution()
+    if (!initialized) return
+    try {
+      this.interpreter.step()
+      let queue = this.state.queue.slice(1)
+      console.log('stack', this.interpreter.stack)
+      let stack = this.interpreter.stack.map(item => {
+        return item.toString('hex')
+      })
+      this.setState({
+        stack,
+        queue
+      })
+    } catch (err) {
+      console.log('err message', `'${err.message}'`)
+      if (err.message === 'Cannot step, no further instructions') {
+        this.refresh()
+        console.warn('out of instructions, refreshing...')
+      }
+    }
   }
 
   refresh = () => {
-    console.log('refresh')
+    this.setState({
+      script: '',
+      queue: [],
+      stack: [],
+      initialized: false
+    })
   }
 
   render() {
@@ -94,7 +117,7 @@ class App extends Component {
     if (this.state.queue.length > 0) {
       queueComponents = this.state.queue.map((expression, i) => {
         return (
-          <span key={i}>{expression}</span>
+          <span style={{ flexGrow: 1 }} key={i}>{expression}</span>
         )
       })
     }
@@ -103,7 +126,7 @@ class App extends Component {
     if (this.state.stack.length > 0) {
       stackComponents = this.state.stack.map((expression, i) => {
         return (
-          <span key={i}>{expression}</span>
+          <span style={{ flexGrow: 1 }} key={i}>{expression}</span>
         )
       })
     }
@@ -118,14 +141,14 @@ class App extends Component {
         <div className='main'>
           <div style={{ display: 'flex', flexDirection: 'column', flexGrow: 1, textAlign: 'center' }}>
             <h2>Queue</h2>
-            <div className='container' id='queue'>
+            <div className='container' id='queue' style={{ display: 'flex', flexDirection: 'column' }}>
               {queueComponents}
             </div>
           </div>
 
           <div style={{ display: 'flex', flexDirection: 'column', flexGrow: 1, textAlign: 'center' }}>
             <h2>Stack</h2>
-            <div className='container' id='stack'>
+            <div className='container' id='stack' style={{ display: 'flex', flexDirection: 'column' }}>
               {stackComponents}
             </div>
           </div>
