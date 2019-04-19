@@ -54,15 +54,13 @@ class App extends Component {
   }
 
   initExecution = async () => {
-    if (this.state.initialized) return
+    if (this.state.initialized) return true
     if (this.state.script === '') {
       console.warn('no instructions provided')
       return false
     }
-    // TODO: interpret each item in queue
     // Test execution
     await this.putItemsInQueue()
-    await this.delay(1000)
     let hex = Assembler.asmToRaw(this.state.script)
     let script = new Script(Buffer.from(hex, 'hex'))
     this.interpreter = new Interpreter(script)
